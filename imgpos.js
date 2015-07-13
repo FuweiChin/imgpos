@@ -1,5 +1,5 @@
 /*!
- * jQuery ImgPos v1.0.0
+ * jQuery ImgPos v1.1.0
  * 
  * Copyright 2015 Fuwei Chin
  * 
@@ -86,6 +86,15 @@
 						to[k]=from[k];
 			}
 			return to;
+		},
+		now: Date.now||function(){
+			new Date().getTime();
+		},
+		exchangeValue:function(o1,p1,o2,p2){
+			var v1=o1[p1];
+			var v2=o2[p2];
+			if(v2!==undefined||p2 in o2)o1[p1]=v2;
+			if(v1!==undefined||p1 in o1)o2[p2]=v1;
 		}
 	};
 	if(!window.addEventListener){
@@ -206,6 +215,38 @@
 		util.assign(testStyle,style);
 		return testStyle.cssText;
 	};
+	util.bindProxyInterval=function(callable,delay){
+		var lock=false;
+		var last=null;
+		var timer=0;
+		var unlock=function(){
+			lock=false;
+			if(!last){return;}
+			var offset=util.now()-last[0];
+			if(offset>=delay){
+				proxy.apply(last[1],last[2]);
+			}else{
+				timer=setTimeout(function(){
+					proxy.apply(last[1],last[2]);
+				},delay-offset);
+			}
+		};
+		var proxy=function(e){
+			if(lock){
+				if(!last){
+					last=[util.now(),this,arguments];
+				}
+				return;
+			}
+			lock=true;
+			last=null;
+			clearInterval(timer);
+			callable.apply(this,arguments);
+			setTimeout(unlock,delay);
+		};
+		return proxy;
+	};
+	window.util=util;//XXX
 
 	/*~~~~~~~~ OO Models ~~~~~~~~*/
 	/**
@@ -223,6 +264,7 @@
 		this.width=width;
 		this.height=height;
 		this.zoom=zoom;
+		this.extras={};
 	}
 	/**
 	 * @method getRatio
@@ -260,6 +302,34 @@
 			break;
 		}
 	}
+	function alignWithExtra(that,pos){
+		switch(pos.x){
+		case "left":
+			this.left=0;
+			break;
+		case "center":
+			this.extras.marginLeft="50%";
+			this.left=(-this.width*this.zoom)/2;
+			break;
+		case "right":
+			this.extras.right=0;
+			this.left=(that.width-this.width*this.zoom);
+			break;
+		}
+		switch(pos.y){
+		case "top":
+			this.top=0;
+			break;
+		case "center":
+			this.extras.marginTop="50%";
+			this.top=(-this.height*this.zoom)/2;
+			break;
+		case "bottom":
+			this.extras.bottom=0;
+			this.top=(that.height-this.height*this.zoom);
+			break;
+		}
+	}
 	/**
 	 * @method toStyle
 	 * @return {Object}
@@ -272,9 +342,30 @@
 			height:(this.height*this.zoom)+"px"
 		};
 	}
+	/**
+	 * @method toStyle
+	 * @return {Object}
+	 */
+	function toStyleExtra(){
+		var style={
+			left:this.left+"px",
+			top:this.top+"px",
+			width:(this.width*this.zoom)+"px",
+			height:(this.height*this.zoom)+"px"
+		};
+		if(this.extras.right!==undefined){
+			delete style.left;
+		}
+		if(this.extras.bottom!==undefined){
+			delete style.top;
+		}
+		return util.assign(style,this.extras);
+	}
 	BoxRect.prototype.getRatio=getRatio;
 	BoxRect.prototype.alignWith=alignWith;
+	BoxRect.prototype.alignWithExtra=alignWithExtra;
 	BoxRect.prototype.toStyle=toStyle;
+	BoxRect.prototype.toStyleExtra=toStyleExtra;
 
 	/**
 	 * @class NamedPosition
@@ -322,7 +413,14 @@
 		 * @type Function - contextual `this` stands for the offset parent of an <img />
 		 * @example function(){this.style.position="relative";}
 		 */
-		ensureParentPositioned:function(){}
+		ensureParentPositioned:function(){},
+		/**
+		 * whether adjust img size and offset on window resize
+		 * @property listenWindowResize
+		 * @type Boolean
+		 * @example false
+		 */
+		listenWindowResize: false
 	};
 	/**
 	 * @for jQuery
@@ -332,8 +430,9 @@
 	 */
 	$.fn.imgpos=function(options){
 		var settings=$.extend({},defaults,options);
+		var imgs=this.slice(0);
 		var img_completeHandler=function(event){
-			var img,vpt,imgRect,vptRect,firstRun;
+			var img,vpt,imgRect,vptRect,firstRun,style;
 			img=event.target||event.srcElement;
 			vpt=settings.offsetParentFunction.call(img);
 			if(!vpt||vpt.nodeType!==1){
@@ -343,29 +442,49 @@
 			firstRun=img.getAttribute("data-zoom")===null;
 			imgRect=firstRun?util.getBoudingBoxRect(img,"content-box"):util.getNaturalBoxRect(img);
 			vptRect=util.getBoudingBoxRect(vpt,"padding-box");
+			style=imgRect.extras;
 			switch(settings.imageScale){
 			case "fill":
-				imgRect.zoom=!(imgRect.width&&imgRect.height)?1:
-						imgRect.getRatio()<vptRect.getRatio()?vptRect.width/imgRect.width:
-						vptRect.height/imgRect.height;
-				imgRect.alignWith(vptRect,settings.namedPosition);
+				if(!(imgRect.width&&imgRect.height)){
+					imgRect.zoom=1;
+				}else if(imgRect.getRatio()<vptRect.getRatio()){
+					imgRect.zoom=vptRect.width/imgRect.width;
+					style.width="100%";
+					style.height="auto";
+				}else{
+					imgRect.zoom=vptRect.height/imgRect.height;
+					style.width="auto";
+					style.height="100%";
+				}
+				imgRect.alignWithExtra(vptRect,settings.namedPosition);
 				break;
 			case "fit":
-				imgRect.zoom=!(imgRect.width&&imgRect.height)?1:
-						imgRect.getRatio()<vptRect.getRatio()?vptRect.height/imgRect.height:
-						vptRect.width/imgRect.width;
-				imgRect.alignWith(vptRect,settings.namedPosition);
+				if(!(imgRect.width&&imgRect.height)){
+					imgRect.zoom=1;
+				}else if(imgRect.getRatio()<vptRect.getRatio()){
+					imgRect.zoom=vptRect.height/imgRect.height;
+					style.width="auto";
+					style.height="100%";
+				}else{
+					imgRect.zoom=vptRect.width/imgRect.width;
+					style.width="100%";
+					style.height="auto";
+				}
+				imgRect.alignWithExtra(vptRect,settings.namedPosition);
 				break;
 			case "none":
 			default:
 				imgRect.zoom=1;
-				imgRect.alignWith(vptRect,settings.namedPosition);
+				imgRect.alignWithExtra(vptRect,settings.namedPosition);
 				break;
 			}
 			if(firstRun){
 				settings.ensureParentPositioned();
 			}
-			img.style.cssText="position: absolute; "+util.toCssText(imgRect.toStyle());
+			style=imgRect.toStyleExtra();
+			util.exchangeValue(style,"left",style,"marginLeft");
+			util.exchangeValue(style,"top",style,"marginTop");
+			img.style.cssText="position: absolute; "+util.toCssText(style);
 			img.setAttribute("data-zoom",imgRect.zoom);
 		};
 		var img_propertychangeHandler=function(event){
@@ -378,6 +497,17 @@
 				},400);
 			}
 		};
+		var window_resizeHandler=util.bindProxyInterval(function(e){
+			imgs.each(support.MSIE<9?function(index,img){
+				img_completeHandler({srcElement:img});
+			}:function(index,img){
+				img_completeHandler.call(img,{target:img});
+			});
+		},400);
+		if(settings.listenWindowResize){
+			$(window).on("resize",window_resizeHandler);
+		}
+		settings.imgs=imgs;
 		settings.namedPosition=util.parseNamedPosition(settings.imagePosition);
 		settings.img_completeHandler=img_completeHandler;
 		settings.img_propertychangeHandler=img_propertychangeHandler;
@@ -411,18 +541,22 @@
 	 */
 	$.fn.removeImgpos=function(){
 		return this.each(function(index,img){
-			var $img,settings;
+			var $img,settings,imgs;
 			if(!img||
 					img.tagName!=="IMG"||
 					!(settings=($img=$(img)).data("imgpos"))){
 				return;
 			}
+			imgs=settings.imgs;
 			util.off(img,"load",settings.img_completeHandler);
 			util.off(img,"abort",settings.img_completeHandler);
 			util.off(img,"error",settings.img_completeHandler);
 			if(support.MSIE<9){
 				util.off(img,"propertychange",settings.img_propertychangeHandler);
 			}
+			var index=$.inArray(img,imgs);
+			if(index!==-1)
+				Array.prototype.splice.call(imgs,index,1);
 			img.style.cssText="";
 			img.removeAttribute("data-zoom");
 			$img.removeData("imgpos");
@@ -452,6 +586,8 @@
 		if(options.offsetParentFunction)
 			//make the callback string a callback function
 			options.offsetParentFunction=new Function(options.offsetParentFunction);
+		if(options.listenWindowResize)
+			options.listenWindowResize=options.listenWindowResize==="true";
 		if(document.body){
 			main(script,selector,options);
 		}else{
