@@ -1,0 +1,41 @@
+@charset "UTF-8";
+
+.tile-list {
+	padding-left: 0;
+	list-style-type: none;
+}
+.tile-list>li{
+	float: left;
+}
+.tile-list:after {
+	content: "";
+	display: table;
+	clear: both;
+	height: 0;
+}
+
+
+.image-list>li{
+	margin: 10px;
+}
+.image-list>li:nth-child(4n+1){
+	clear: left;
+}
+.image-list>li.nth-child-4n-p-1{
+	clear: left;
+}
+
+
+.thumbnail{
+	position: relative;
+	display: block;
+	width: 400px;
+	height: 300px;
+	overflow: hidden;
+	border: 20px solid #000000;
+	border-radius: 15px;
+}
+.thumbnail>img{
+	border: 0;
+	vertical-align: top;/*to remove img bottom margin*/
+}

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=8" />
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=1920, initial-scale=1" />
+	<title>jQuery ImgPos</title>
+	<link rel="stylesheet" href="styles/demo.css" />
+	<style>
+	h1{
+		text-align: center;
+	}
+	h2{
+		background-color: #eeeeee;
+		padding: 10px 20px;
+	}
+	</style>
+</head>
+<body>
+	<h1>jQuery ImgPos</h1>
+	<p>A image position adjust manager</p>
+	<h2>Features</h2>
+	<ul>
+		<li>Adjust image position to fit its container</li>
+		<li>Re-adjust position when image src changed</li>
+		<li>Declarative boot support with data-* attributes</li>
+		<li>Backward compatible with Internet Explorer 8 (and even 7)</li>
+	</ul>
+	<h2>Requirements</h2>
+	<ul>
+		<li>Offset parent of the an img should be pre-set to positioned(style position not static), with CSS, or imgpos option "ensureParentPositioned".</li>
+		<li>Fixed width and height of offset parent need to be set.(temporaryly)</li>
+	</ul>
+	<h2>Limitations</h2>
+	<ul>
+		<li>Declarative boot is not supported when a browser has feature `document.currentScript` and, in the meanwhile the author are loading imgpos asynchronously.</li>
+	</ul>
+	<h2>Natural Centered</h2>
+	<button type="button" class="btn-change-src" data-from="200x150.jpg" data-to="150x200.jpg">Exchange src</button>
+	<ul class="centered-image-list image-list tile-list">
+		<li><a href="" class="thumbnail"><img src="images/camomile-240x135.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-240x150.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-200x150.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-150x200.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-480x270.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-480x300.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-400x300.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-300x400.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-960x540.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-960x600.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-800x600.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-600x800.jpg" alt="" /></a></li>
+	</ul>
+	<h2>Scaled to Fill</h2>
+	<button type="button" class="btn-change-src" data-from="200x150.jpg" data-to="150x200.jpg">Exchange src</button>
+	<ul class="fill-image-list image-list tile-list">
+		<li><a href="" class="thumbnail"><img src="images/camomile-240x135.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-240x150.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-200x150.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-150x200.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-480x270.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-480x300.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-400x300.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-300x400.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-960x540.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-960x600.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-800x600.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-600x800.jpg" alt="" /></a></li>
+	</ul>
+	<h2>Fit</h2>
+	<button type="button" class="btn-change-src" data-from="200x150.jpg" data-to="150x200.jpg">Exchange src</button>
+	<ul class="fit-image-list image-list tile-list">
+		<li><a href="" class="thumbnail"><img src="images/camomile-240x135.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-240x150.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-200x150.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-150x200.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-480x270.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-480x300.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-400x300.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-300x400.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-960x540.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-960x600.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-800x600.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-600x800.jpg" alt="" /></a></li>
+	</ul>
+	<h2>No Script</h2>
+	<button type="button" class="btn-change-src" data-from="200x150.jpg" data-to="150x200.jpg">Exchange src</button>
+	<ul class="orig-image-list image-list tile-list">
+		<li><a href="" class="thumbnail"><img src="images/camomile-240x135.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-240x150.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-200x150.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-150x200.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-480x270.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-480x300.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-400x300.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-300x400.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-960x540.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-960x600.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-800x600.jpg" alt="" /></a></li>
+		<li><a href="" class="thumbnail"><img src="images/camomile-600x800.jpg" alt="" /></a></li>
+	</ul>
+	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="../imgpos.js" data-query=".fit-image-list img"
+			data-image-scale="fit" data-image-position="center center"
+			data-offset-parent-function="return this.parentElement"></script><!--[if IE]>
+	<script>
+	var ie=document.documentMode;
+	if(ie<=8)$('.image-list>li:nth-child(4n+1)').addClass('nth-child-4n-p-1');
+	if(ie<=7)$('.image-list').after('<br clear="all" />');
+	</script><![endif]-->
+	<script>
+	(function($){
+		$(".centered-image-list img").imgpos({
+			imageScale:"none"
+		});
+		$(".fill-image-list img").imgpos({
+			imageScale:"fill"
+		});
+		$(".orig-image-list img").imgpos({
+			imageScale:"fit"
+		});
+	}(jQuery));
+	jQuery(function($){
+		$('a[href=""]').on("click",function(e){
+			e.preventDefault();
+		});
+		$(".btn-change-src").on("click",function(){
+			var btn=$(this);
+			var data=btn.data();
+			var imgFrom=btn.next(".image-list").find('img[src$="'+data.from+'"]')[0];
+			var imgTo=btn.next(".image-list").find('img[src$="'+data.to+'"]')[0];
+			var src=imgTo.src;
+			imgTo.src=imgFrom.src;
+			imgFrom.src=src;
+		});
+	});
+	</script>
+</body>
+</html>
