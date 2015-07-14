@@ -23,6 +23,9 @@ on image offset parent
 + fixed width and height need to be set
 
 ##Usage
+
+Here is a [ImgPos Usage Demo](https://fuweichin.github.io/imgpos/demo/demo.html).
+
 Assuming you have an image list like this
 ```html
 <ul class="centered-image-list image-list tile-list">
