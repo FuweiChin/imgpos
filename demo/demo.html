@@ -5,7 +5,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=8" />
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=1920, initial-scale=1" />
-	<title>jQuery ImgPos</title>
+	<title>jQuery ImgPos Demo</title>
 	<link rel="stylesheet" href="styles/demo.css" />
 	<style>
 	h1{
@@ -18,24 +18,7 @@
 	</style>
 </head>
 <body>
-	<h1>jQuery ImgPos</h1>
-	<p>A image position adjust manager</p>
-	<h2>Features</h2>
-	<ul>
-		<li>Adjust image position to fit its container</li>
-		<li>Re-adjust position when image src changed</li>
-		<li>Declarative boot support with data-* attributes</li>
-		<li>Backward compatible with Internet Explorer 8 (and even 7)</li>
-	</ul>
-	<h2>Requirements</h2>
-	<ul>
-		<li>Offset parent of the an img should be pre-set to positioned(style position not static), with CSS, or imgpos option "ensureParentPositioned".</li>
-		<li>Fixed width and height of offset parent need to be set.(temporaryly)</li>
-	</ul>
-	<h2>Limitations</h2>
-	<ul>
-		<li>Declarative boot is not supported when a browser has feature `document.currentScript` and, in the meanwhile the author are loading imgpos asynchronously.</li>
-	</ul>
+	<h1>jQuery ImgPos Demo</h1>
 	<h2>Natural Centered</h2>
 	<button type="button" class="btn-change-src" data-from="200x150.jpg" data-to="150x200.jpg">Exchange src</button>
 	<ul class="centered-image-list image-list tile-list">
@@ -100,7 +83,15 @@
 		<li><a href="" class="thumbnail"><img src="images/camomile-800x600.jpg" alt="" /></a></li>
 		<li><a href="" class="thumbnail"><img src="images/camomile-600x800.jpg" alt="" /></a></li>
 	</ul>
-	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<div>
+		Image Source: http://wallpaperswide.com/the_camomile-wallpapers.html
+	</div>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script type="text/javascript">
+	if(!window.jQuery){
+		document.write('<script src="//code.jquery.com/jquery-1.11.3.min.js"><'+'/script>');
+	}
+	</script>
 	<script src="../imgpos.js" data-query=".fit-image-list img"
 			data-image-scale="fit" data-image-position="center center"
 			data-offset-parent-function="return this.parentElement"></script><!--[if IE]>
