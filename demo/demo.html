@@ -19,7 +19,7 @@
 </head>
 <body>
 	<h1>jQuery ImgPos Demo</h1>
-	<h2>Natural Centered</h2>
+	<h2>Natural stretch(not scale)</h2>
 	<button type="button" class="btn-change-src" data-from="200x150.jpg" data-to="150x200.jpg">Exchange src</button>
 	<ul class="centered-image-list image-list tile-list">
 		<li><a href="" class="thumbnail"><img src="images/camomile-240x135.jpg" alt="" /></a></li>
@@ -35,7 +35,7 @@
 		<li><a href="" class="thumbnail"><img src="images/camomile-800x600.jpg" alt="" /></a></li>
 		<li><a href="" class="thumbnail"><img src="images/camomile-600x800.jpg" alt="" /></a></li>
 	</ul>
-	<h2>Scaled to Fill</h2>
+	<h2>Fill</h2>
 	<button type="button" class="btn-change-src" data-from="200x150.jpg" data-to="150x200.jpg">Exchange src</button>
 	<ul class="fill-image-list image-list tile-list">
 		<li><a href="" class="thumbnail"><img src="images/camomile-240x135.jpg" alt="" /></a></li>
@@ -67,7 +67,7 @@
 		<li><a href="" class="thumbnail"><img src="images/camomile-800x600.jpg" alt="" /></a></li>
 		<li><a href="" class="thumbnail"><img src="images/camomile-600x800.jpg" alt="" /></a></li>
 	</ul>
-	<h2>No Script</h2>
+	<h2>No script</h2>
 	<button type="button" class="btn-change-src" data-from="200x150.jpg" data-to="150x200.jpg">Exchange src</button>
 	<ul class="orig-image-list image-list tile-list">
 		<li><a href="" class="thumbnail"><img src="images/camomile-240x135.jpg" alt="" /></a></li>
@@ -107,9 +107,6 @@
 		});
 		$(".fill-image-list img").imgpos({
 			imageScale:"fill"
-		});
-		$(".orig-image-list img").imgpos({
-			imageScale:"fit"
 		});
 	}(jQuery));
 	jQuery(function($){
