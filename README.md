@@ -89,7 +89,7 @@ Note: Declarative boot doesn't work under these circumstances: the browser doesn
 		<td>imageScale</td>
 		<td>String</td>
 		<td>"fit"</td>
-		<td>"none" | "fit" | <span style="text-decoration:line-through;">"scale"</span> "fill"</td>
+		<td>"none" | "fit" | "fill"</td>
 	</tr>
 	<tr>
 		<td>imagePosition</td>
