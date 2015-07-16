@@ -1,5 +1,5 @@
 /*!
- * jQuery ImgPos v1.1.0
+ * jQuery ImgPos v1.1.1
  * 
  * Copyright 2015 Fuwei Chin
  * 
@@ -246,7 +246,6 @@
 		};
 		return proxy;
 	};
-	window.util=util;//XXX
 
 	/*~~~~~~~~ OO Models ~~~~~~~~*/
 	/**
@@ -284,30 +283,6 @@
 			this.left=0;
 			break;
 		case "center":
-			this.left=(that.width-this.width*this.zoom)/2;
-			break;
-		case "right":
-			this.left=(that.width-this.width*this.zoom);
-			break;
-		}
-		switch(pos.y){
-		case "top":
-			this.top=0;
-			break;
-		case "center":
-			this.top=(that.height-this.height*this.zoom)/2;
-			break;
-		case "bottom":
-			this.top=(that.height-this.height*this.zoom);
-			break;
-		}
-	}
-	function alignWithExtra(that,pos){
-		switch(pos.x){
-		case "left":
-			this.left=0;
-			break;
-		case "center":
 			this.extras.marginLeft="50%";
 			this.left=(-this.width*this.zoom)/2;
 			break;
@@ -335,18 +310,6 @@
 	 * @return {Object}
 	 */
 	function toStyle(){
-		return {
-			left:this.left+"px",
-			top:this.top+"px",
-			width:(this.width*this.zoom)+"px",
-			height:(this.height*this.zoom)+"px"
-		};
-	}
-	/**
-	 * @method toStyle
-	 * @return {Object}
-	 */
-	function toStyleExtra(){
 		var style={
 			left:this.left+"px",
 			top:this.top+"px",
@@ -363,9 +326,7 @@
 	}
 	BoxRect.prototype.getRatio=getRatio;
 	BoxRect.prototype.alignWith=alignWith;
-	BoxRect.prototype.alignWithExtra=alignWithExtra;
 	BoxRect.prototype.toStyle=toStyle;
-	BoxRect.prototype.toStyleExtra=toStyleExtra;
 
 	/**
 	 * @class NamedPosition
@@ -456,7 +417,6 @@
 					style.width="auto";
 					style.height="100%";
 				}
-				imgRect.alignWithExtra(vptRect,settings.namedPosition);
 				break;
 			case "fit":
 				if(!(imgRect.width&&imgRect.height)){
@@ -470,18 +430,17 @@
 					style.width="100%";
 					style.height="auto";
 				}
-				imgRect.alignWithExtra(vptRect,settings.namedPosition);
 				break;
 			case "none":
 			default:
 				imgRect.zoom=1;
-				imgRect.alignWithExtra(vptRect,settings.namedPosition);
 				break;
 			}
+			imgRect.alignWith(vptRect,settings.namedPosition);
 			if(firstRun){
 				settings.ensureParentPositioned();
 			}
-			style=imgRect.toStyleExtra();
+			style=imgRect.toStyle();
 			util.exchangeValue(style,"left",style,"marginLeft");
 			util.exchangeValue(style,"top",style,"marginTop");
 			img.style.cssText="position: absolute; "+util.toCssText(style);
@@ -503,7 +462,7 @@
 			}:function(index,img){
 				img_completeHandler.call(img,{target:img});
 			});
-		},400);
+		},200);
 		if(settings.listenWindowResize){
 			$(window).on("resize",window_resizeHandler);
 		}
